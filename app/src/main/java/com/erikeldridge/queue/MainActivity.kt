@@ -1,20 +1,17 @@
 package com.erikeldridge.queue
 
-import android.content.ContentValues
 import android.content.Context
-import android.database.DatabaseUtils
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.widget.TextView
-
-data class User(val id: Long, val phone: String?)
 
 /**
  * sizes:
- * * kotlin: 1505867
+ * - base: 1505867
+ * - kotlin: 1505867
+ * - proto: 1745382
  */
 class Store(val context: Context): SQLiteOpenHelper(context, "store.db", null, 1) {
     fun put(type: String, id: String, attr: String, value: String) {
@@ -67,10 +64,10 @@ class MainActivity : AppCompatActivity() {
         val phone = findViewById(R.id.phone) as TextView
         val store = Store(this)
         store.put("users", "1", "phone", "+123")
-        phone.text = store.get("users", "1", "phone")
-//        store.putUser(User(1, "123"))
-//        val user = store.getUserById(1)
-//        Log.d("foo", "$user")
-//        phone.text = user?.phone
+        val user = Models.User.newBuilder()
+                .setId(1)
+                .setPhone(store.get("users", "1", "phone"))
+                .build()
+        phone.text = user.toString()
     }
 }
