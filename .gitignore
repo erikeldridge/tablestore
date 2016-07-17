@@ -1,8 +1,15 @@
+# AS
 *.iml
+.idea
+
+# Gradle
 .gradle
-/local.properties
-/.idea/workspace.xml
-/.idea/libraries
-.DS_Store
 /build
 /captures
+
+# Local config
+/local.properties
+
+# Mac
+.DS_Store
+
