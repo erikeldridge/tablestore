@@ -2,6 +2,7 @@ package com.erikeldridge.tablestore
 
 import android.content.ContentValues
 import android.content.Context
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
@@ -14,22 +15,21 @@ class TableStore(val helper: SQLiteOpenHelper) {
             put(columnValue, value)
         }, SQLiteDatabase.CONFLICT_REPLACE)
     }
-    fun get(type: String, id: String, attr: String): String? {
-        val cursor = helper.readableDatabase.rawQuery(
-                "select $columnValue from $table where type=? and id=? and attr=?",
-                arrayOf(type, id, attr))
-        val values = mutableListOf<String>()
-        cursor.moveToFirst()
-        while (cursor.count > 0 && !cursor.isAfterLast) {
-            values.add(cursor.getString(cursor.getColumnIndex(columnValue)))
-            cursor.moveToNext()
-        }
-        cursor.close()
-        return values.firstOrNull()
-    }
     fun get(type: String, id: String): Map<String, String> {
         val cursor = helper.readableDatabase.query(table, arrayOf(columnAttr, columnValue),
                 "type=? and id=?", arrayOf(type, id), null, null, null, null)
+        val values = toMap(cursor)
+        cursor.close()
+        return values
+    }
+    fun get(type: String, id: String, attr: String): String? {
+        val cursor = helper.readableDatabase.query(table, arrayOf(columnAttr, columnValue),
+                "type=? and id=? and attr=?", arrayOf(type, id, attr), null, null, null, null)
+        val values = toMap(cursor)
+        cursor.close()
+        return values[attr]
+    }
+    fun toMap(cursor: Cursor): Map<String, String> {
         val values = mutableMapOf<String, String>()
         cursor.moveToFirst()
         while (cursor.count > 0 && !cursor.isAfterLast) {
@@ -37,7 +37,6 @@ class TableStore(val helper: SQLiteOpenHelper) {
                     cursor.getString(cursor.getColumnIndex(columnValue)))
             cursor.moveToNext()
         }
-        cursor.close()
         return values
     }
     fun close(){
