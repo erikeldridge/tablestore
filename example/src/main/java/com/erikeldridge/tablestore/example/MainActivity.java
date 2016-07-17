@@ -22,11 +22,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 TableStore store = TableStore.open(activity);
-                store.put("people", "1", "name", "Ms. Foo");
-                store.put("people", "1", "phone", "+1234567890");
-                store.put("people", "1", "email", "1@example.com");
-                final String phoneData = store.get("people", "1", "phone");
-                final Map<String, String> personData = store.get("people", "1");
+                String userId = "1";
+                store.put("users", userId, "name", "Ms. Foo");
+                store.put("users", userId, "phone", "+1234567890");
+                store.put("users", userId, "email", "1@example.com");
+                final String phoneData = store.get("users", userId, "phone");
+                final Map<String, String> personData = store.get("users", userId);
                 store.close();
                 activity.runOnUiThread(new Runnable() {
                     @Override

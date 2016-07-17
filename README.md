@@ -15,6 +15,8 @@ final Map<String, String> user = store.get("users", userId); // {name: "Ms. Foo"
 store.close();
 ```
 
+See [MainActivity.java](example/src/main/java/com/erikeldridge/tablestore/example/MainActivity.java) for example integration.
+
 ## Details
 
 TableStore is just a database table and some convenience functions. The power comes from the multi-level key pattern. TableStore implements this pattern via a table with columns for type, id, attr, value:
@@ -27,7 +29,7 @@ The primary key is composed of type, id, and attr, enabling fast queries for an 
 
 TableStore is easy to set up, use, and extend because it's just standard SQLite under the hood.
 
-TableStore takes inspiration from [Manhattan](https://blog.twitter.com/2014/manhattan-our-real-time-multi-tenant-distributed-database-for-twitter-scale), [CDB](http://cr.yp.to/cdb.html), [LevelDB](https://github.com/google/leveldb), [Firebase](https://www.firebase.com/docs/rest/guide/understanding-data.html), [BigTable](https://en.wikipedia.org/wiki/Bigtable#Design), etc
+TableStore takes inspiration from other stores with multi-level keys, namely [Manhattan](https://blog.twitter.com/2014/manhattan-our-real-time-multi-tenant-distributed-database-for-twitter-scale), [CDB](http://cr.yp.to/cdb.html), [LevelDB](https://github.com/google/leveldb), [Firebase](https://firebase.google.com/docs/database/web/structure-data), and [BigTable](https://en.wikipedia.org/wiki/Bigtable#Design).
 
 ## Installation
 
@@ -39,11 +41,13 @@ allprojects {
     }
 }
 dependencies {
-    compile 'com.github.erikeldridge:tablestore:x.y.z'
+    compile 'com.github.erikeldridge:tablestore:tablestore:x.y.z'
 }
 ```
 
 ## License
+
+Unless otherwise noted, all content in this repo is licensed as follows:
 
 Copyright 2016 Erik Eldridge
 
