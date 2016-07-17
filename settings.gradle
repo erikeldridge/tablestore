@@ -1,1 +1,1 @@
-include ':app', ':tablestore'
+include ':sample', ':tablestore'

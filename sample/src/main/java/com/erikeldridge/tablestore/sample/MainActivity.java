@@ -1,4 +1,4 @@
-package com.erikeldridge.sample;
+package com.erikeldridge.tablestore.sample;
 
 import android.app.Activity;
 import android.os.Bundle;
