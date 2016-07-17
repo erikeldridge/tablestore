@@ -1,5 +1,6 @@
 package com.erikeldridge.queue
 
+import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
@@ -13,11 +14,14 @@ import android.widget.TextView
  * - kotlin: 1505867
  * - proto: 1745382
  */
-class Store(val context: Context): SQLiteOpenHelper(context, "store.db", null, 1) {
+class Store(context: Context): SQLiteOpenHelper(context, "store.db", null, 1) {
     fun put(type: String, id: String, attr: String, value: String) {
-        writableDatabase.rawQuery(
-                "insert into $table(type, id, attr, value) values(?,?,?,?)",
-                arrayOf(type, id, attr, value)).close()
+        val values = ContentValues()
+        values.put(columnType, type)
+        values.put(columnId, id)
+        values.put(columnAttr, attr)
+        values.put(columnValue, value)
+        writableDatabase.insertWithOnConflict(table, "null", values, SQLiteDatabase.CONFLICT_REPLACE)
     }
     fun get(type: String, id: String, attr: String): String? {
         val cursor = readableDatabase.rawQuery(
@@ -31,6 +35,20 @@ class Store(val context: Context): SQLiteOpenHelper(context, "store.db", null, 1
         }
         cursor.close()
         return values.firstOrNull()
+    }
+    fun get(type: String, id: String): Map<String, String> {
+        val cursor = readableDatabase.rawQuery(
+                "select $columnAttr, $columnValue from $table where type=? and id=?",
+                arrayOf(type, id))
+        val values = mutableMapOf<String, String>()
+        cursor.moveToFirst()
+        while (cursor.count > 0 && !cursor.isAfterLast) {
+            values.put(cursor.getString(cursor.getColumnIndex(columnAttr)),
+                    cursor.getString(cursor.getColumnIndex(columnValue)))
+            cursor.moveToNext()
+        }
+        cursor.close()
+        return values
     }
     companion object {
         val table = "v1"
@@ -63,10 +81,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val phone = findViewById(R.id.phone) as TextView
         val store = Store(this)
-        store.put("users", "1", "phone", "+123")
+        store.put("users", "1", "phone", "+789")
+        val values = store.get("users", "1")
         val user = Models.User.newBuilder()
                 .setId(1)
-                .setPhone(store.get("users", "1", "phone"))
+                .setPhone(values["phone"])
                 .build()
         phone.text = user.toString()
     }
