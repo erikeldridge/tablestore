@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Queue.iml" filepath="$PROJECT_DIR$/Queue.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tablestore/tablestore.iml" filepath="$PROJECT_DIR$/tablestore/tablestore.iml" />
     </modules>
   </component>
 </project>

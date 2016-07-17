@@ -1,8 +1,0 @@
-package com.erikeldridge.queue;
-
-option java_outer_classname = "Models";
-
-message User {
-  required int64 id = 1;
-  optional string phone = 2;
-}

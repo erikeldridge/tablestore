@@ -1,30 +1,21 @@
-package com.erikeldridge.queue
+package com.erikeldridge.tablestore
 
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.widget.TextView
 
-/**
- * sizes:
- * - base: 1505867
- * - kotlin: 1505867
- * - proto: 1745382
- */
-class Store(context: Context): SQLiteOpenHelper(context, "store.db", null, 1) {
+class TableStore(val helper: SQLiteOpenHelper) {
     fun put(type: String, id: String, attr: String, value: String) {
-        val values = ContentValues()
-        values.put(columnType, type)
-        values.put(columnId, id)
-        values.put(columnAttr, attr)
-        values.put(columnValue, value)
-        writableDatabase.insertWithOnConflict(table, "null", values, SQLiteDatabase.CONFLICT_REPLACE)
+        helper.writableDatabase.insertWithOnConflict(table, "null", ContentValues().apply {
+            put(columnType, type)
+            put(columnId, id)
+            put(columnAttr, attr)
+            put(columnValue, value)
+        }, SQLiteDatabase.CONFLICT_REPLACE)
     }
     fun get(type: String, id: String, attr: String): String? {
-        val cursor = readableDatabase.rawQuery(
+        val cursor = helper.readableDatabase.rawQuery(
                 "select $columnValue from $table where type=? and id=? and attr=?",
                 arrayOf(type, id, attr))
         val values = mutableListOf<String>()
@@ -37,9 +28,8 @@ class Store(context: Context): SQLiteOpenHelper(context, "store.db", null, 1) {
         return values.firstOrNull()
     }
     fun get(type: String, id: String): Map<String, String> {
-        val cursor = readableDatabase.rawQuery(
-                "select $columnAttr, $columnValue from $table where type=? and id=?",
-                arrayOf(type, id))
+        val cursor = helper.readableDatabase.query(table, arrayOf(columnAttr, columnValue),
+                "type=? and id=?", arrayOf(type, id), null, null, null, null)
         val values = mutableMapOf<String, String>()
         cursor.moveToFirst()
         while (cursor.count > 0 && !cursor.isAfterLast) {
@@ -50,8 +40,14 @@ class Store(context: Context): SQLiteOpenHelper(context, "store.db", null, 1) {
         cursor.close()
         return values
     }
+    fun close(){
+        helper.close()
+    }
     companion object {
-        val table = "v1"
+        @JvmStatic fun open(context: Context): TableStore {
+            return TableStore(Helper(context))
+        }
+        val table = "tablestore_table"
         val columnType = "type"
         val columnId = "id"
         val columnAttr = "attr"
@@ -68,25 +64,11 @@ class Store(context: Context): SQLiteOpenHelper(context, "store.db", null, 1) {
         )
         """
     }
-    override fun onCreate(db: SQLiteDatabase?) {
-        db?.execSQL(createTableQuery)
-    }
-    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-    }
-}
-
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        val phone = findViewById(R.id.phone) as TextView
-        val store = Store(this)
-        store.put("users", "1", "phone", "+789")
-        val values = store.get("users", "1")
-        val user = Models.User.newBuilder()
-                .setId(1)
-                .setPhone(values["phone"])
-                .build()
-        phone.text = user.toString()
+    class Helper(context: Context): SQLiteOpenHelper(context, "tablestore_v1.db", null, 1) {
+        override fun onCreate(db: SQLiteDatabase?) {
+            db?.execSQL(createTableQuery)
+        }
+        override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
+        }
     }
 }

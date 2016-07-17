@@ -1,4 +1,4 @@
-package com.erikeldridge.queue;
+package com.erikeldridge.tablestore;
 
 import org.junit.Test;
 

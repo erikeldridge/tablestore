@@ -1,4 +1,4 @@
-package com.erikeldridge.queue;
+package com.erikeldridge.sample;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
