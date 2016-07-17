@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">Queue</string>
+    <string name="app_name">TableStore example</string>
     <string name="output">phone=%1$s, person: %2$s</string>
 </resources>
