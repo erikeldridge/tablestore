@@ -41,7 +41,8 @@ allprojects {
     }
 }
 dependencies {
-    compile 'com.github.erikeldridge:tablestore:tablestore:x.y.z'
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile 'com.github.erikeldridge:tablestore:{tag|sha|branch-SNAPSHOT}@aar'
 }
 ```
 
