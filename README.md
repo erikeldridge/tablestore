@@ -29,7 +29,7 @@ The primary key is composed of type, id, and attr, enabling fast queries for an 
 
 TableStore is easy to set up, use, and extend because it's just standard SQLite under the hood.
 
-TableStore takes inspiration from other stores with multi-level keys, namely [Manhattan](https://blog.twitter.com/2014/manhattan-our-real-time-multi-tenant-distributed-database-for-twitter-scale), [CDB](http://cr.yp.to/cdb.html), [LevelDB](https://github.com/google/leveldb), [Firebase](https://firebase.google.com/docs/database/web/structure-data), and [BigTable](https://en.wikipedia.org/wiki/Bigtable#Design).
+TableStore takes inspiration from other stores with multi-level keys, namely [Manhattan](https://blog.twitter.com/2014/manhattan-our-real-time-multi-tenant-distributed-database-for-twitter-scale), [CDB](http://cr.yp.to/cdb.html), [LevelDB](https://github.com/google/leveldb), [Firebase](https://firebase.google.com/docs/database/web/structure-data), [BigTable](https://en.wikipedia.org/wiki/Bigtable#Design), and [Guava's Table collection](https://github.com/google/guava/wiki/NewCollectionTypesExplained#table).
 
 ## Installation
 
