@@ -1,6 +1,7 @@
-# AS
+# Android
 *.iml
 .idea
+*.apk
 
 # Gradle
 .gradle
