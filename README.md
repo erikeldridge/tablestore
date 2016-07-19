@@ -41,9 +41,7 @@ allprojects {
     }
 }
 dependencies {
-    compile('com.github.erikeldridge:tablestore:0.0.2@aar') {
-      transitive=true
-    }
+    compile 'com.github.erikeldridge:tablestore:0.0.1@aar'
 }
 ```
 
