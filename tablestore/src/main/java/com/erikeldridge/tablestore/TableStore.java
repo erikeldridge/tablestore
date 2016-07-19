@@ -16,6 +16,7 @@ public class TableStore {
     public final static String COLUMN_ID = "id";
     public final static String COLUMN_ATTR = "attr";
     public final static String COLUMN_VALUE = "value";
+    public final static String COLUMN_UPDATED = "updated";
     public TableStore(SQLiteOpenHelper helper) {
         this.helper = helper;
     }
@@ -73,7 +74,7 @@ public class TableStore {
         @Override
         public void onCreate(SQLiteDatabase db) {
             db.execSQL(context.getString(R.string.db_v1_create_table_query,
-                    TABLE, COLUMN_TYPE, COLUMN_ID, COLUMN_ATTR, COLUMN_VALUE));
+                    TABLE, COLUMN_TYPE, COLUMN_ID, COLUMN_ATTR, COLUMN_VALUE, COLUMN_UPDATED));
         }
 
         @Override

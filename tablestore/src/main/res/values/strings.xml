@@ -6,6 +6,7 @@
             %3$s string,
             %4$s string,
             %5$s string,
+            %6$s integer(4) not null default (strftime('%%s','now')),
             primary key (%2$s, %3$s, %4$s)
         );"
     </string>
