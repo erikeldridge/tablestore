@@ -50,6 +50,9 @@ public class TableStore {
         cursor.close();
         return values.get(attr);
     }
+    public Cursor query(String sql, String[] args){
+        return helper.getReadableDatabase().rawQuery(sql, args);
+    }
     protected Map<String, String> toMap(Cursor cursor) {
         final Map<String, String> values = new HashMap<>();
         cursor.moveToFirst();
