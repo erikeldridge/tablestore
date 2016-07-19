@@ -41,7 +41,7 @@ allprojects {
     }
 }
 dependencies {
-    compile 'com.github.erikeldridge:tablestore:0.0.1@aar'
+    compile 'com.github.erikeldridge:tablestore:x.y.z@aar' // see https://github.com/erikeldridge/tablestore/releases
 }
 ```
 
