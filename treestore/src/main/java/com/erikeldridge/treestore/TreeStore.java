@@ -31,18 +31,17 @@ public class TreeStore {
         db.close();
     }
     public void put(String path, String value) {
-        put(path, value, null, null);
+        put(path, value, null);
     }
     public Map<String, String> get(String path) {
         return get(path, COLUMN_PATH+" desc", null);
     }
-    public void put(String path, String value, Integer ttl, TimeUnit unit) {
+    public void put(String path, String value, TTL ttl) {
         final ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_PATH, path);
         contentValues.put(COLUMN_VALUE, value);
         if (ttl != null) {
-            final long now = System.currentTimeMillis()/1000L;
-            contentValues.put(COLUMN_EXPIRES, now + unit.toSeconds(ttl));
+            contentValues.put(COLUMN_EXPIRES, ttl.toTimestamp());
         }
         db.insertWithOnConflict(TABLE, "null", contentValues, SQLiteDatabase.CONFLICT_REPLACE);
     }
@@ -67,6 +66,18 @@ public class TreeStore {
             cursor.moveToNext();
         }
         return values;
+    }
+    public static class TTL {
+        final int lifespan;
+        final TimeUnit unit;
+        public TTL(int lifespan, TimeUnit unit) {
+            this.lifespan = lifespan;
+            this.unit = unit;
+        }
+        long toTimestamp(){
+            final long now = System.currentTimeMillis()/1000L;
+            return now + unit.toSeconds(lifespan);
+        }
     }
     static class Helper extends SQLiteOpenHelper {
         final Context context;
