@@ -29,12 +29,13 @@ public class MainActivity extends AppCompatActivity {
                 store.put("users/1/email", "1@example.com", new TTL(1, TimeUnit.MINUTES));
                 final Map<String, String> phoneData = store.get("users/1/phone"); // {"users/1/phone":"+1234567890"}
                 final Map<String, String> userData = store.get("users/1"); // {"users/1/name":"Ms. Foo", "users/1/phone":"+1234567890", ...}
+                final Map<String, String> usersData = store.get("users", "asc", 10); // first 10 users
                 store.close();
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         view.setText(activity.getString(R.string.output, phoneData,
-                                userData.toString()));
+                                userData.toString(), usersData.toString()));
                     }
                 });
             }

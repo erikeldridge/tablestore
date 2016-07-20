@@ -34,7 +34,7 @@ public class TreeStore {
         put(path, value, null);
     }
     public Map<String, String> get(String path) {
-        return get(path, "desc", null);
+        return get(path, null, null);
     }
     public void put(String path, String value, TTL ttl) {
         final ContentValues contentValues = new ContentValues();
@@ -45,11 +45,13 @@ public class TreeStore {
         }
         db.insertWithOnConflict(TABLE, "null", contentValues, SQLiteDatabase.CONFLICT_REPLACE);
     }
-    public Map<String, String> get(String path, String order, String limit) {
+    public Map<String, String> get(String path, String order, Integer limit) {
+        final String orderString = order == null ? null : COLUMN_PATH+" "+order;
+        final String limitString = limit == null ? null : limit.toString();
         final Cursor cursor = db.query(
                 TABLE, new String[] {COLUMN_PATH, COLUMN_VALUE},
                 context.getString(R.string.sql_query, COLUMN_PATH, COLUMN_EXPIRES, COLUMN_UPDATED),
-                new String[]{path}, null, null, COLUMN_PATH+" "+order, limit);
+                new String[]{path}, null, null, orderString, limitString);
         final Map<String, String> values = toMap(cursor);
         cursor.close();
         return values;
