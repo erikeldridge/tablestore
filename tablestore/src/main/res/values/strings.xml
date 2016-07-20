@@ -1,14 +1,14 @@
 <resources>
     <string name="app_name">TableStore</string>
-    <string name="db_v1_create_table_query">
+    <string name="sql_create_table">
         "create table %1$s (
-            %2$s string,
+            %2$s string primary key,
             %3$s string,
-            %4$s string,
-            %5$s string,
-            %6$s integer,
-            %7$s integer not null default (strftime('%%s','now')),
-            primary key (%2$s, %3$s, %4$s)
+            %4$s integer,
+            %5$s integer not null default (strftime('%%s','now'))
         );"
+    </string>
+    <string name="sql_query">
+        "%1$s like ? || '%%' and (%2$s is null or %2$s='' or %2$s > %3$s)"
     </string>
 </resources>
