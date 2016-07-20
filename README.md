@@ -1,6 +1,6 @@
 # TreeStore
 
-An SQLite-backed key-value store for Android with support for hierarchical queries.
+A key-value store for Android that is trivial to set up and supports hierarchical queries.
 
 ## Example
 
@@ -16,17 +16,17 @@ store.close();
 
 See [MainActivity.java](example/src/main/java/com/erikeldridge/treestore/example/MainActivity.java) for example integration.
 
-## Details
+## Problem statement
 
-TreeStore is just a database table and some convenience functions.
+Android provides a number of [storage options](https://developer.android.com/guide/topics/data/data-storage.html), but nothing between simple key-value pairs in Shared Preferences and full relational data in SQLite.
+
+## Solution
 
 TreeStore is easy to set up, use, and extend because it's just standard SQLite under the hood.
 
-The power comes from hierarchical keys, implemented via [materialized path](https://tabo.pe/projects/django-treebeard/docs/4.0.1/mp_tree.html).
+TreeStore supports map-like data structures via hierarchical keys. Queries are relatively fast because paths are primary keys.
 
-Queries are relatively fast because path is a primary key.
-
-TreeStore takes inspiration from stores with multi-level keys, namely [Manhattan](https://blog.twitter.com/2014/manhattan-our-real-time-multi-tenant-distributed-database-for-twitter-scale), [CDB](http://cr.yp.to/cdb.html), [SSTable](https://www.igvita.com/2012/02/06/sstable-and-log-structured-storage-leveldb/)/[BigTable](https://en.wikipedia.org/wiki/Bigtable#Design)/[LevelDB](https://github.com/google/leveldb)/[Firebase](https://firebase.google.com/docs/database/web/structure-data), data structures like [Guava's Table collection](https://github.com/google/guava/wiki/NewCollectionTypesExplained#table), and tree storage tools like [django-treebeard](https://tabo.pe/projects/django-treebeard/docs/4.0.1/mp_tree.html).
+TreeStore takes inspiration from stores with multi-level keys like [Manhattan](https://blog.twitter.com/2014/manhattan-our-real-time-multi-tenant-distributed-database-for-twitter-scale), [CDB](http://cr.yp.to/cdb.html), and [SSTable](https://www.igvita.com/2012/02/06/sstable-and-log-structured-storage-leveldb/)/[BigTable](https://en.wikipedia.org/wiki/Bigtable#Design)/[LevelDB](https://github.com/google/leveldb)/[Firebase](https://firebase.google.com/docs/database/web/structure-data), data structures like [Guava's Table collection](https://github.com/google/guava/wiki/NewCollectionTypesExplained#table), and tree storage tools like [django-treebeard](https://tabo.pe/projects/django-treebeard/docs/4.0.1/mp_tree.html).
 
 ## Installation
 
