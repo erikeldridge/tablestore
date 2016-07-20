@@ -26,7 +26,7 @@ TreeStore is easy to set up, use, and extend because it's just standard SQLite u
 
 TreeStore supports map-like data structures via hierarchical keys. Queries are relatively fast because paths are primary keys.
 
-TreeStore takes inspiration from stores with multi-level keys like [Manhattan](https://blog.twitter.com/2014/manhattan-our-real-time-multi-tenant-distributed-database-for-twitter-scale), [CDB](http://cr.yp.to/cdb.html), and [SSTable](https://www.igvita.com/2012/02/06/sstable-and-log-structured-storage-leveldb/)/[BigTable](https://en.wikipedia.org/wiki/Bigtable#Design)/[LevelDB](https://github.com/google/leveldb)/[Firebase](https://firebase.google.com/docs/database/web/structure-data), data structures like [Guava's Table collection](https://github.com/google/guava/wiki/NewCollectionTypesExplained#table), and tree storage tools like [django-treebeard](https://tabo.pe/projects/django-treebeard/docs/4.0.1/mp_tree.html).
+TreeStore takes inspiration from stores with multi-level keys like [Manhattan](https://blog.twitter.com/2014/manhattan-our-real-time-multi-tenant-distributed-database-for-twitter-scale), [CDB](http://cr.yp.to/cdb.html), and [SSTable](https://www.igvita.com/2012/02/06/sstable-and-log-structured-storage-leveldb/)/[BigTable](https://en.wikipedia.org/wiki/Bigtable#Design)/[LevelDB](https://github.com/google/leveldb)/[Firebase](https://firebase.google.com/docs/database/web/structure-data), data structures like [Guava's Table collection](https://github.com/google/guava/wiki/NewCollectionTypesExplained#table), and tree storage tools like [django-treebeard](https://tabo.pe/projects/django-treebeard/docs/4.0.1/index.html).
 
 ## Installation
 
