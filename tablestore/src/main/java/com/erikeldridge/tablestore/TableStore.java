@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class TableStore {
     final Context context;
@@ -17,10 +18,12 @@ public class TableStore {
     public final static String COLUMN_VALUE = "value";
     public final static String COLUMN_UPDATED = "updated";
     public final static String COLUMN_EXPIRES = "expires";
+
     public TableStore(Context context, SQLiteDatabase db) {
         this.context = context;
         this.db = db;
     }
+
     public static TableStore open(Context context){
         return new TableStore(context, new Helper(context).getWritableDatabase());
     }
@@ -28,18 +31,20 @@ public class TableStore {
         db.close();
     }
     public void put(String path, String value) {
-        put(path, value, null);
+        put(path, value, null, null);
     }
     public Map<String, String> get(String path) {
         return get(path, COLUMN_PATH+" desc", null);
     }
-    public void put(String path, String value, Long expires) {
+    public void put(String path, String value, Integer ttl, TimeUnit unit) {
         final ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_PATH, path);
         contentValues.put(COLUMN_VALUE, value);
-        contentValues.put(COLUMN_EXPIRES, expires);
-        db.insertWithOnConflict(TABLE, "null", contentValues,
-                SQLiteDatabase.CONFLICT_REPLACE);
+        if (ttl != null) {
+            final long now = System.currentTimeMillis()/1000L;
+            contentValues.put(COLUMN_EXPIRES, now + unit.toSeconds(ttl));
+        }
+        db.insertWithOnConflict(TABLE, "null", contentValues, SQLiteDatabase.CONFLICT_REPLACE);
     }
     public Map<String, String> get(String path, String orderBy, String limit) {
         final Cursor cursor = db.query(
