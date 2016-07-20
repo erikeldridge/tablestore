@@ -1,1 +1,1 @@
-include ':example', ':tablestore'
+include ':example', ':treestore'

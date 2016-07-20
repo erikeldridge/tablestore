@@ -38,7 +38,7 @@ allprojects {
     }
 }
 dependencies {
-    compile 'com.github.erikeldridge:TreeStore:x.y.z@aar' // see https://github.com/erikeldridge/TreeStore/releases
+    compile 'com.github.erikeldridge:treestore:x.y.z@aar' // see https://github.com/erikeldridge/treestore/releases
 }
 ```
 
