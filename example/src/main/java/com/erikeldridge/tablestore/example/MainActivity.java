@@ -23,9 +23,9 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 TableStore store = TableStore.open(activity);
                 String userId = "1";
-                store.put("users", userId, "name", "Ms. Foo");
-                store.put("users", userId, "phone", "+1234567890");
-                store.put("users", userId, "email", "1@example.com");
+                store.put("users", userId, "name", "Ms. Foo", System.currentTimeMillis()/1000);
+                store.put("users", userId, "phone", "+1234567890", null);
+                store.put("users", userId, "email", "1@example.com", null);
                 final String phoneData = store.get("users", userId, "phone");
                 final Map<String, String> personData = store.get("users", userId);
                 store.close();
