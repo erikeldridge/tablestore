@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TableStore</string>
+    <string name="app_name">TreeStore</string>
     <string name="sql_create_table">
         "create table %1$s (
             %2$s string primary key,

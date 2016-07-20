@@ -1,4 +1,4 @@
-package com.erikeldridge.tablestore.example;
+package com.erikeldridge.treestore;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

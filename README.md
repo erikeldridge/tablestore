@@ -1,35 +1,32 @@
-# TableStore
+# TreeStore
 
-An SQLite-backed key -> values store for Android.
+An SQLite-backed key-value store for Android with support for hierarchical queries.
 
 ## Example
 
 ```java
-TableStore store = TableStore.open(activity);
-String userId = "1";
-store.put("users", userId, "name", "Ms. Foo");
-store.put("users", userId, "phone", "+1234567890");
-store.put("users", userId, "email", "1@example.com");
-final String phone = store.get("users", userId, "phone"); // "+1234567890"
-final Map<String, String> user = store.get("users", userId); // {name: "Ms. Foo", phone: "+1234567890", ...}
+TreeStore store = TreeStore.open(activity);
+store.put("users/1/name", "Ms. Foo");
+store.put("users/1/phone", "+1234567890");
+store.put("users/1/email", "1@example.com", 1, TimeUnit.MINUTES);
+final Map<String, String> phoneData = store.get("users/1/phone"); // {"users/1/phone":"+1234567890"}
+final Map<String, String> userData = store.get("users/1"); // {"users/1/name":"Ms. Foo", "users/1/phone":"+1234567890", ...}
 store.close();
 ```
 
-See [MainActivity.java](example/src/main/java/com/erikeldridge/tablestore/example/MainActivity.java) for example integration.
+See [MainActivity.java](example/src/main/java/com/erikeldridge/treestore/example/MainActivity.java) for example integration.
 
 ## Details
 
-TableStore is just a database table and some convenience functions. The power comes from the multi-level key pattern. TableStore implements this pattern via a table with columns for type, id, attr, value:
+TreeStore is just a database table and some convenience functions.
 
-type|id|attr|value
----|---|---|---
-users|1|name|Ms. Foo
+TreeStore is easy to set up, use, and extend because it's just standard SQLite under the hood.
 
-The primary key is composed of type, id, and attr, enabling fast queries for an attribute. Less specific keys enable range queries.
+The power comes from hierarchical keys, implemented via [materialized path](https://tabo.pe/projects/django-treebeard/docs/4.0.1/mp_tree.html).
 
-TableStore is easy to set up, use, and extend because it's just standard SQLite under the hood.
+Queries are relatively fast because path is a primary key.
 
-TableStore takes inspiration from other stores with multi-level keys, namely [Manhattan](https://blog.twitter.com/2014/manhattan-our-real-time-multi-tenant-distributed-database-for-twitter-scale), [CDB](http://cr.yp.to/cdb.html), [SSTable](https://www.igvita.com/2012/02/06/sstable-and-log-structured-storage-leveldb/)/[BigTable](https://en.wikipedia.org/wiki/Bigtable#Design)/[LevelDB](https://github.com/google/leveldb)/[Firebase](https://firebase.google.com/docs/database/web/structure-data), and [Guava's Table collection](https://github.com/google/guava/wiki/NewCollectionTypesExplained#table).
+TreeStore takes inspiration from stores with multi-level keys, namely [Manhattan](https://blog.twitter.com/2014/manhattan-our-real-time-multi-tenant-distributed-database-for-twitter-scale), [CDB](http://cr.yp.to/cdb.html), [SSTable](https://www.igvita.com/2012/02/06/sstable-and-log-structured-storage-leveldb/)/[BigTable](https://en.wikipedia.org/wiki/Bigtable#Design)/[LevelDB](https://github.com/google/leveldb)/[Firebase](https://firebase.google.com/docs/database/web/structure-data), data structures like [Guava's Table collection](https://github.com/google/guava/wiki/NewCollectionTypesExplained#table), and tree storage tools like [django-treebeard](https://tabo.pe/projects/django-treebeard/docs/4.0.1/mp_tree.html).
 
 ## Installation
 
@@ -41,7 +38,7 @@ allprojects {
     }
 }
 dependencies {
-    compile 'com.github.erikeldridge:tablestore:x.y.z@aar' // see https://github.com/erikeldridge/tablestore/releases
+    compile 'com.github.erikeldridge:TreeStore:x.y.z@aar' // see https://github.com/erikeldridge/TreeStore/releases
 }
 ```
 

@@ -1,4 +1,4 @@
-package com.erikeldridge.tablestore;
+package com.erikeldridge.treestore;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -10,22 +10,22 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-public class TableStore {
+public class TreeStore {
     final Context context;
     final SQLiteDatabase db;
-    public final static String TABLE = "tablestore_table";
+    public final static String TABLE = "treestore_table";
     public final static String COLUMN_PATH = "path";
     public final static String COLUMN_VALUE = "value";
     public final static String COLUMN_UPDATED = "updated";
     public final static String COLUMN_EXPIRES = "expires";
 
-    public TableStore(Context context, SQLiteDatabase db) {
+    public TreeStore(Context context, SQLiteDatabase db) {
         this.context = context;
         this.db = db;
     }
 
-    public static TableStore open(Context context){
-        return new TableStore(context, new Helper(context).getWritableDatabase());
+    public static TreeStore open(Context context){
+        return new TreeStore(context, new Helper(context).getWritableDatabase());
     }
     public void close(){
         db.close();
@@ -71,7 +71,7 @@ public class TableStore {
     static class Helper extends SQLiteOpenHelper {
         final Context context;
         public Helper(Context context) {
-            super(context, "tablestore.db", null, 1);
+            super(context, "treestore.db", null, 1);
             this.context = context;
         }
 

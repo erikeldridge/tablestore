@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">TableStore example</string>
+    <string name="app_name">TreeStore example</string>
     <string name="output">phone=%1$s, person: %2$s</string>
-    <string name="create_query">phone=%1$s, person: %2$s</string>
 </resources>

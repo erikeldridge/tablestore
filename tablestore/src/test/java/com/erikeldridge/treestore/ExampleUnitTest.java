@@ -1,4 +1,4 @@
-package com.erikeldridge.tablestore;
+package com.erikeldridge.treestore;
 
 import org.junit.Test;
 

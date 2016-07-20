@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.erikeldridge.tablestore">
+          package="com.erikeldridge.treestore">
 
     <application
         android:allowBackup="true"
