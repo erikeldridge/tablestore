@@ -50,11 +50,15 @@ public class TreeStore {
         final String limitString = limit == null ? null : limit.toString();
         final Cursor cursor = db.query(
                 TABLE, new String[] {COLUMN_PATH, COLUMN_VALUE},
-                context.getString(R.string.sql_query, COLUMN_PATH, COLUMN_EXPIRES, COLUMN_UPDATED),
+                context.getString(R.string.sql_select_condition, COLUMN_PATH, COLUMN_EXPIRES, COLUMN_UPDATED),
                 new String[]{path}, null, null, orderString, limitString);
         final Map<String, String> values = toMap(cursor);
         cursor.close();
         return values;
+    }
+    public int delete(String path){
+        return db.delete(TABLE, context.getString(R.string.sql_delete_condition, COLUMN_PATH),
+                new String[]{path});
     }
     public Cursor query(String sql, String[] args){
         return db.rawQuery(sql, args);

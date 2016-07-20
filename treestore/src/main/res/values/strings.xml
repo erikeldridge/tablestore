@@ -8,7 +8,10 @@
             %5$s integer not null default (strftime('%%s','now'))
         );"
     </string>
-    <string name="sql_query">
+    <string name="sql_select_condition">
         "%1$s like ? || '%%' and (%2$s is null or %2$s='' or %2$s > %3$s)"
+    </string>
+    <string name="sql_delete_condition">
+        "%1$s like ? || '%%'"
     </string>
 </resources>
