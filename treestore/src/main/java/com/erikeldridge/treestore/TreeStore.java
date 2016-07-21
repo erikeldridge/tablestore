@@ -60,6 +60,10 @@ public class TreeStore {
         return db.delete(TABLE, context.getString(R.string.sql_delete_condition, COLUMN_PATH),
                 new String[]{path});
     }
+    public int clean(){
+        return db.delete(TABLE, context.getString(R.string.sql_clean_condition, COLUMN_EXPIRES),
+                new String[]{});
+    }
     public Cursor query(String sql, String[] args){
         return db.rawQuery(sql, args);
     }

@@ -14,4 +14,7 @@
     <string name="sql_delete_condition">
         "%1$s like ? || '%%'"
     </string>
+    <string name="sql_clean_condition">
+        "strftime('%%s','now') > %1$s"
+    </string>
 </resources>

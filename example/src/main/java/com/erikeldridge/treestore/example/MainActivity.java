@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
                 store.delete("users/1/phone");
                 final Map<String, String> userData = store.get("users/1"); // {"users/1/name":"Ms. Foo", "users/1/email": "1@example.com"...}
                 final Map<String, String> usersData = store.get("users", "asc", 10); // first 10 users
+                store.clean(); // remove expired entries
                 store.close();
                 activity.runOnUiThread(new Runnable() {
                     @Override
