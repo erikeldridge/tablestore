@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
                 store.put("users/1/name", "Ms. Foo");
                 store.put("users/1/phone", "+1234567890");
                 store.put("users/1/email", "1@example.com");
-                store.put("users/1/location", "Chicago", new TTL(1, TimeUnit.MINUTES));
+                store.put("users/1/location", "Chicago", new TTL(1, TimeUnit.HOURS));
                 final Map<String, String> phoneData = store.get("users/1/phone"); // {"users/1/phone":"+1234567890"}
                 store.delete("users/1/phone");
                 final Map<String, String> userData = store.get("users/1"); // {"users/1/name":"Ms. Foo", "users/1/email": "1@example.com"...}

@@ -17,7 +17,7 @@ public class TreeStore {
     public final static String COLUMN_PATH = "path";
     public final static String COLUMN_VALUE = "value";
     public final static String COLUMN_UPDATED = "updated";
-    public final static String COLUMN_EXPIRES = "expires";
+    public final static String COLUMN_TTL = "ttl";
 
     public TreeStore(Context context, SQLiteDatabase db) {
         this.context = context;
@@ -41,7 +41,7 @@ public class TreeStore {
         contentValues.put(COLUMN_PATH, path);
         contentValues.put(COLUMN_VALUE, value);
         if (ttl != null) {
-            contentValues.put(COLUMN_EXPIRES, ttl.toTimestamp());
+            contentValues.put(COLUMN_TTL, ttl.toSeconds());
         }
         db.insertWithOnConflict(TABLE, "null", contentValues, SQLiteDatabase.CONFLICT_REPLACE);
     }
@@ -50,7 +50,7 @@ public class TreeStore {
         final String limitString = limit == null ? null : limit.toString();
         final Cursor cursor = db.query(
                 TABLE, new String[] {COLUMN_PATH, COLUMN_VALUE},
-                context.getString(R.string.sql_select_condition, COLUMN_PATH, COLUMN_EXPIRES, COLUMN_UPDATED),
+                context.getString(R.string.sql_select_condition, COLUMN_PATH, COLUMN_TTL, COLUMN_UPDATED),
                 new String[]{path}, null, null, orderString, limitString);
         final Map<String, String> values = toMap(cursor);
         cursor.close();
@@ -61,8 +61,8 @@ public class TreeStore {
                 new String[]{path});
     }
     public int clean(){
-        return db.delete(TABLE, context.getString(R.string.sql_clean_condition, COLUMN_EXPIRES),
-                new String[]{});
+        return db.delete(TABLE, context.getString(R.string.sql_clean_condition, COLUMN_TTL,
+                COLUMN_UPDATED), new String[]{});
     }
     public Cursor query(String sql, String[] args){
         return db.rawQuery(sql, args);
@@ -84,9 +84,8 @@ public class TreeStore {
             this.lifespan = lifespan;
             this.unit = unit;
         }
-        long toTimestamp(){
-            final long now = System.currentTimeMillis()/1000L;
-            return now + unit.toSeconds(lifespan);
+        long toSeconds(){
+            return unit.toSeconds(lifespan);
         }
     }
     static class Helper extends SQLiteOpenHelper {
@@ -99,7 +98,7 @@ public class TreeStore {
         @Override
         public void onCreate(SQLiteDatabase db) {
             db.execSQL(context.getString(R.string.sql_create_table,
-                    TABLE, COLUMN_PATH, COLUMN_VALUE, COLUMN_EXPIRES, COLUMN_UPDATED));
+                    TABLE, COLUMN_PATH, COLUMN_VALUE, COLUMN_TTL, COLUMN_UPDATED));
         }
 
         @Override
