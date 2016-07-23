@@ -1,16 +1,34 @@
 # TreeStore
 
-A key-value store for Android that is trivial to set up and supports hierarchical queries.
+A key-value store for Android with trivial set up and support for hierarchical queries.
 
 ## Example
 
 ```java
 TreeStore store = TreeStore.open(activity);
+
+// simple key-value
 store.put("users/1/name", "Ms. Foo");
+final Map<String, String> nameData = store.get("users/1/name"); // {"users/1/name":"Ms. Foo"}
+store.delete("users/1/name");
+
+// simple range query
 store.put("users/1/phone", "+1234567890");
-store.put("users/1/email", "1@example.com", 1, TimeUnit.MINUTES);
-final Map<String, String> phoneData = store.get("users/1/phone"); // {"users/1/phone":"+1234567890"}
-final Map<String, String> userData = store.get("users/1"); // {"users/1/name":"Ms. Foo", "users/1/phone":"+1234567890", ...}
+store.put("users/1/email", "1@example.com");
+final Map<String, String> userData = store.get("users/1"); // {"users/1/name":"Ms. Foo", "users/1/email":"1@example.com"...}
+store.delete("users/1");
+
+// advanced range query
+store.put("messages/1/text", ":)");
+store.put("messages/2/text", ":(");
+final Map<String, String> messagesData = store.get("messages", "asc", 10); // first 10 messages
+
+// ludicrous mode
+int count = store.db.delete(TreeStore.TABLE, String.format(
+        "%s like ? || '%%' and cast(strftime('%%s', 'now') as integer) - %s > 60", // delete messages older than a minute
+        TreeStore.COLUMN_PATH, TreeStore.COLUMN_UPDATED),
+        new String[]{"messages"});
+
 store.close();
 ```
 
@@ -22,11 +40,28 @@ Android provides a number of [storage options](https://developer.android.com/gui
 
 ## Solution
 
-TreeStore is easy to set up, use, and extend because it's just standard SQLite under the hood.
+TreeStore provides **a simple get/put/delete interface** for persisting key-value pairs.
 
-TreeStore supports map-like data structures via hierarchical keys. Queries are relatively fast because paths are primary keys.
+Because we often work with data classes, which flatten nicely as hierarchical keys, we can get a lot of utility from **hierarchical queries**. TreeStore provides this via materialized paths. Queries are fast because paths are primary keys in the database.
 
-TreeStore takes inspiration from stores with multi-level keys like [Manhattan](https://blog.twitter.com/2014/manhattan-our-real-time-multi-tenant-distributed-database-for-twitter-scale), [CDB](http://cr.yp.to/cdb.html), and [SSTable](https://www.igvita.com/2012/02/06/sstable-and-log-structured-storage-leveldb/)/[BigTable](https://en.wikipedia.org/wiki/Bigtable#Design)/[LevelDB](https://github.com/google/leveldb)/[Firebase](https://firebase.google.com/docs/database/web/structure-data), data structures like [Guava's Table collection](https://github.com/google/guava/wiki/NewCollectionTypesExplained#table), and tree storage tools like [django-treebeard](https://tabo.pe/projects/django-treebeard/docs/4.0.1/index.html).
+For example:
+
+```
+class User {
+  public final String id;
+  public final String name;
+}
+...
+User user = new User(1, "Ms. Foo")
+...
+store.put("users/"+user.id+"/name", user.name);
+...
+store.get("users/"+user.id); // {"users/1/name":"Ms. Foo"}
+```
+
+Finally, TreeStore is easy to set up, use, and extend because it's just **standard SQLite** under the hood.
+
+TreeStore takes inspiration from stores with multi-level keys like [CDB](http://cr.yp.to/cdb.html) and [SSTable](https://www.igvita.com/2012/02/06/sstable-and-log-structured-storage-leveldb/)/[BigTable](https://en.wikipedia.org/wiki/Bigtable#Design)/[LevelDB](https://github.com/google/leveldb)/[Firebase](https://firebase.google.com/docs/database/web/structure-data), data structures like [Guava's Table collection](https://github.com/google/guava/wiki/NewCollectionTypesExplained#table), and tree storage tools like [django-treebeard](https://tabo.pe/projects/django-treebeard/docs/4.0.1/index.html).
 
 ## Installation
 
