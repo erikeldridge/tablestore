@@ -1,17 +1,14 @@
 package com.erikeldridge.treestore.example;
 
 import android.app.Activity;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
 import com.erikeldridge.treestore.TreeStore;
-import com.erikeldridge.treestore.TreeStore.TTL;
 
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
     @Override
@@ -37,28 +34,23 @@ public class MainActivity extends AppCompatActivity {
                 final Map<String, String> userData = store.get("users/1"); // {"users/1/name":"Ms. Foo", "users/1/email":"1@example.com"...}
                 store.delete("users/1");
 
-                // advanced key-value
-                store.put("messages/1/text", ":)", new TTL(1, TimeUnit.HOURS));
-                store.put("messages/2/text", ":(", new TTL(1, TimeUnit.HOURS));
-                store.clean(); // remove expired entries
-
                 // advanced range query
+                store.put("messages/1/text", ":)");
+                store.put("messages/2/text", ":(");
                 final Map<String, String> messagesData = store.get("messages", "asc", 10); // first 10 messages
 
                 // ludicrous mode
-                Cursor cursor = store.db.rawQuery(String.format(
-                        "select %s,%s from %s where %s like '%%' || ? || '%%'",
-                        TreeStore.COLUMN_PATH, TreeStore.COLUMN_VALUE, TreeStore.TABLE,
-                        TreeStore.COLUMN_VALUE), new String[]{":)"});
-                final Map<String, String> happyMessages = TreeStore.toMap(cursor);
-                cursor.close();
+                int count = store.db.delete(TreeStore.TABLE, String.format(
+                        "%s like ? || '%%' and cast(strftime('%%s', 'now') as integer) - %s > 60", // delete messages older than a minute
+                        TreeStore.COLUMN_PATH, TreeStore.COLUMN_UPDATED),
+                        new String[]{"messages"});
 
                 store.close();
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         view.setText(activity.getString(R.string.output, nameData,
-                                userData.toString(), messagesData.toString(), happyMessages.toString()));
+                                userData.toString(), messagesData.toString()));
                     }
                 });
             }
