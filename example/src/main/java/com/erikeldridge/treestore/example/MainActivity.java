@@ -1,6 +1,7 @@
 package com.erikeldridge.treestore.example;
 
 import android.app.Activity;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -30,24 +31,34 @@ public class MainActivity extends AppCompatActivity {
                 final Map<String, String> nameData = store.get("users/1/name"); // {"users/1/name":"Ms. Foo"}
                 store.delete("users/1/name");
 
-                // range query
+                // simple range query
                 store.put("users/1/phone", "+1234567890");
                 store.put("users/1/email", "1@example.com");
                 final Map<String, String> userData = store.get("users/1"); // {"users/1/name":"Ms. Foo", "users/1/email":"1@example.com"...}
+                store.delete("users/1");
 
                 // advanced key-value
-                store.put("users/1/location", "Chicago", new TTL(1, TimeUnit.HOURS));
+                store.put("messages/1/text", ":)", new TTL(1, TimeUnit.HOURS));
+                store.put("messages/2/text", ":(", new TTL(1, TimeUnit.HOURS));
                 store.clean(); // remove expired entries
 
                 // advanced range query
-                final Map<String, String> usersData = store.get("users", "asc", 10); // first 10 user entries
+                final Map<String, String> messagesData = store.get("messages", "asc", 10); // first 10 messages
+
+                // ludicrous mode
+                Cursor cursor = store.db.rawQuery(String.format(
+                        "select %s,%s from %s where %s like '%%' || ? || '%%'",
+                        TreeStore.COLUMN_PATH, TreeStore.COLUMN_VALUE, TreeStore.TABLE,
+                        TreeStore.COLUMN_VALUE), new String[]{":)"});
+                final Map<String, String> happyMessages = TreeStore.toMap(cursor);
+                cursor.close();
 
                 store.close();
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         view.setText(activity.getString(R.string.output, nameData,
-                                userData.toString(), usersData.toString()));
+                                userData.toString(), messagesData.toString(), happyMessages.toString()));
                     }
                 });
             }

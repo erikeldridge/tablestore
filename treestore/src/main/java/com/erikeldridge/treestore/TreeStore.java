@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 public class TreeStore {
     final Context context;
-    final SQLiteDatabase db;
+    public final SQLiteDatabase db;
     public final static String TABLE = "treestore_table";
     public final static String COLUMN_PATH = "path";
     public final static String COLUMN_VALUE = "value";
@@ -48,8 +48,7 @@ public class TreeStore {
     public Map<String, String> get(String path, String order, Integer limit) {
         final String orderString = order == null ? null : COLUMN_PATH+" "+order;
         final String limitString = limit == null ? null : limit.toString();
-        final Cursor cursor = db.query(
-                TABLE, new String[] {COLUMN_PATH, COLUMN_VALUE},
+        final Cursor cursor = db.query(TABLE, new String[] {COLUMN_PATH, COLUMN_VALUE},
                 context.getString(R.string.sql_select_condition, COLUMN_PATH, COLUMN_TTL, COLUMN_UPDATED),
                 new String[]{path}, null, null, orderString, limitString);
         final Map<String, String> values = toMap(cursor);
@@ -64,10 +63,7 @@ public class TreeStore {
         return db.delete(TABLE, context.getString(R.string.sql_clean_condition, COLUMN_TTL,
                 COLUMN_UPDATED), new String[]{});
     }
-    public Cursor query(String sql, String[] args){
-        return db.rawQuery(sql, args);
-    }
-    protected Map<String, String> toMap(Cursor cursor) {
+    public static Map<String, String> toMap(Cursor cursor) {
         final Map<String, String> values = new HashMap<>();
         cursor.moveToFirst();
         while (cursor.getCount() > 0 && !cursor.isAfterLast()) {
