@@ -12,12 +12,12 @@
         alter table %1$s add column %2$s integer
     </string>
     <string name="sql_select_condition">
-        "%1$s like ? || '%%' and (%2$s is null or %2$s='' or strftime('%%s','now') &lt; (%2$s + %3$s))"
+        "%1$s like ? || '%%' and (%2$s is null or cast(strftime('%%s','now') as integer) &lt; %2$s + %3$s)"
     </string>
     <string name="sql_delete_condition">
         "%1$s like ? || '%%'"
     </string>
     <string name="sql_clean_condition">
-        "(%1$s is not null or %1$s != '') and strftime('%%s','now') &gt; %1$s + %2$s"
+        "%1$s is not null and cast(strftime('%%s','now') as integer) &gt; %1$s + %2$s"
     </string>
 </resources>
