@@ -8,6 +8,9 @@
             %5$s integer not null default (strftime('%%s','now'))
         );"
     </string>
+    <string name="sql_alter_table_v2">
+        alter table %1$s add column %2$s integer
+    </string>
     <string name="sql_select_condition">
         "%1$s like ? || '%%' and (%2$s is null or %2$s='' or strftime('%%s','now') &lt; (%2$s + %3$s))"
     </string>

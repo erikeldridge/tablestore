@@ -91,7 +91,7 @@ public class TreeStore {
     static class Helper extends SQLiteOpenHelper {
         final Context context;
         public Helper(Context context) {
-            super(context, "treestore.db", null, 1);
+            super(context, "treestore.db", null, 2);
             this.context = context;
         }
 
@@ -103,7 +103,9 @@ public class TreeStore {
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+            if (oldVersion < 2) {
+                db.execSQL(context.getString(R.string.sql_alter_table_v2, TABLE, COLUMN_TTL));
+            }
         }
     }
 }
